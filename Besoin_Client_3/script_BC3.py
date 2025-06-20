@@ -384,3 +384,117 @@ else:
     )
     fig.write_html("prediction_traj_delta_evol.html")
 
+
+mmsi_of_interest = 577278000
+#mmsi_of_interest = 566646000
+#mmsi_of_interest = 538005167
+
+df_mmsi = data_clean[data_clean['MMSI'] == mmsi_of_interest].copy()
+
+if df_mmsi.empty:
+    print(f"Aucune donnée trouvée pour le MMSI {mmsi_of_interest}")
+else:
+    first_position = df_mmsi.iloc[0]
+    current_lat = first_position['LAT']
+    current_lon = first_position['LON']
+    sog = first_position['SOG']
+    cog = first_position['COG']
+    heading = first_position['Heading']
+    vessel_type = first_position['VesselType']
+    length = first_position['Length']
+    width = first_position['Width']
+    draft = first_position['Draft']
+    cargo = first_position['Cargo']
+    estimated_delta_t = 300
+
+    if 60 <= vessel_type <= 69:
+        vessel_type = 60
+    elif 70 <= vessel_type <= 79:
+        vessel_type = 70
+    elif 80 <= vessel_type <= 89:
+        vessel_type = 80
+
+    n_steps = len(df_mmsi) - 1
+    future_positions = []
+
+    for _ in range(n_steps):
+        input_data = pd.DataFrame({
+            'LAT': [current_lat],
+            'LON': [current_lon],
+            'SOG': [sog],
+            'COG': [cog],
+            'Heading': [heading],
+            'VesselType': [vessel_type],
+            'Length': [length],
+            'Width': [width],
+            'Draft': [draft],
+            'Cargo': [cargo],
+            'delta_t': [estimated_delta_t]
+        })
+
+        predicted_delta = model_pipeline.predict(input_data)[0]
+        delta_lat, delta_lon = predicted_delta
+
+        current_lat = delta_lat
+        current_lon = delta_lon
+        future_positions.append((current_lat, current_lon))
+
+    if future_positions:
+        future_lats, future_lons = zip(*future_positions)
+    else:
+        future_lats, future_lons = [], []
+
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scattermapbox(
+        lat=df_mmsi['LAT'],
+        lon=df_mmsi['LON'],
+        mode='lines+markers',
+        marker=go.scattermapbox.Marker(
+            size=8,
+            color='blue'
+        ),
+        name=f'Trajectoire historique (MMSI {mmsi_of_interest})'
+    ))
+
+    fig.add_trace(go.Scattermapbox(
+        lat=[first_position['LAT']],
+        lon=[first_position['LON']],
+        mode='markers',
+        marker=go.scattermapbox.Marker(
+            size=15,
+            color='green',
+            symbol='star'
+        ),
+        name='Première position connue (point de départ de la prédiction)'
+    ))
+
+    fig.add_trace(go.Scattermapbox(
+        lat=future_lats,
+        lon=future_lons,
+        mode='lines+markers',
+        marker=go.scattermapbox.Marker(
+            size=8,
+            color='red'
+        ),
+        name='Trajectoire prédite en partant du début'
+    ))
+
+    fig.update_layout(
+        mapbox_style="open-street-map",
+        hovermode='closest',
+        mapbox=dict(
+            bearing=0,
+            center=go.layout.mapbox.Center(
+                lat=first_position['LAT'],
+                lon=first_position['LON']
+            ),
+            pitch=0,
+            zoom=10
+        ),
+        title=f'Comparaison Trajectoire historique et Trajectoire prédite (à partir du début) pour le MMSI {mmsi_of_interest}',
+        margin={"r": 0, "t": 50, "l": 0, "b": 0}
+    )
+    fig.write_html("prediction_traj_superposed.html")
+
