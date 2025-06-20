@@ -27,7 +27,7 @@ data_clean['delta_t'] = data_clean.groupby('MMSI')['BaseDateTime'].diff().dt.tot
 data_clean['delta_LAT'] = data_clean.groupby('MMSI')['LAT'].shift(-1)
 data_clean['delta_LON'] = data_clean.groupby('MMSI')['LON'].shift(-1)
 
-X = data_clean[['LAT', 'LON', 'SOG', 'COG', 'VesselType', 'Length', 'Width', 'Draft', 'Cargo', 'delta_t']].copy()
+X = data_clean[['LAT', 'LON', 'SOG', 'COG', 'Heading', 'VesselType', 'Length', 'Width', 'Draft', 'Cargo', 'delta_t']].copy()
 y = data_clean[['delta_LAT', 'delta_LON']]
 
 X['VesselType'] = X['VesselType'].apply(lambda x: 60 if 60 <= x <= 69 else x)
@@ -51,7 +51,7 @@ X_test = X_test[~nan_mask]
 y_test = y_test[~nan_mask]
 
 categorical_features = ['VesselType', 'Cargo']
-numerical_features = ['LAT', 'LON', 'SOG', 'COG', 'Length', 'Width', 'Draft', 'delta_t']
+numerical_features = ['LAT', 'LON', 'SOG', 'COG', 'Heading', 'Length', 'Width', 'Draft', 'delta_t']
 
 preprocessor = ColumnTransformer(
     transformers=[
@@ -165,7 +165,7 @@ fig.update_layout(
     margin={"r":0,"t":40,"l":0,"b":0}
 )
 
-fig.write_html("prediction_map_tile_plotly_centered.html")
+fig.write_html("prediction_map_val.html")
 
 mmsi_of_interest = 538005167
 
@@ -179,6 +179,7 @@ else:
     current_lon = last_position['LON']
     sog = last_position['SOG']
     cog = last_position['COG']
+    heading = last_position['Heading']
     vessel_type = last_position['VesselType']
     length = last_position['Length']
     width = last_position['Width']
@@ -202,6 +203,7 @@ else:
             'LON': [current_lon],
             'SOG': [sog],
             'COG': [cog],
+            'Heading': [heading],
             'VesselType': [vessel_type],
             'Length': [length],
             'Width': [width],
@@ -285,6 +287,7 @@ else:
     base_lon = last_position['LON']
     sog = last_position['SOG']
     cog = last_position['COG']
+    heading = last_position['Heading']
     vessel_type = last_position['VesselType']
     length = last_position['Length']
     width = last_position['Width']
@@ -310,6 +313,7 @@ else:
             'LON': [base_lon],
             'SOG': [sog],
             'COG': [cog],
+            'Heading': [heading],
             'VesselType': [vessel_type],
             'Length': [length],
             'Width': [width],

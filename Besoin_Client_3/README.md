@@ -4,8 +4,9 @@ Ce projet permet de prédire la prochaine position (latitude et longitude) d'un 
 
 ## Fichiers
 
-* `script_final.py` : script principal permettant de faire une prédiction de position.
-* `model_3.pkl` : fichier pickle contenant le modèle de prédiction (prérequis pour le script).
+* `script_final.py` : script principal permettant de faire une prédiction de position unique.
+* `script_final_bonus.py` : version avancée du script qui prédit une trajectoire future sur plusieurs étapes et génère une carte interactive.
+* `model_3.pkl` : fichier pickle contenant le modèle de prédiction (prérequis pour les scripts).
 
 ## Prérequis
 
@@ -14,16 +15,20 @@ Ce projet permet de prédire la prochaine position (latitude et longitude) d'un 
   * `pandas`
   * `argparse`
   * `pickle`
+  * `plotly`
+  * `matplotlib`
 
-Installez les dépendances si nécessaire :
+Installation des dépendances si nécessaire :
 
 ```bash
-pip install pandas
+pip install pandas plotly matplotlib
 ```
 
 ## Utilisation
 
-Lancez le script en ligne de commande avec les arguments requis :
+### Script simple (`script_final.py`)
+
+Ce script prédit une unique position future du navire à partir de ses données actuelles :
 
 ```bash
 python script_final.py \
@@ -40,6 +45,26 @@ python script_final.py \
   --time 183
 ```
 
+### Script bonus (`script_final_bonus.py`)
+
+Ce script prédit une trajectoire complète sur plusieurs itérations, en plus de générer une visualisation de la trajectoire sur une carte interactive (HTML).
+
+```bash
+python script_final_bonus.py \
+  --LAT 28.60688 \
+  --LON -94.12511 \
+  --SOG 13.0 \
+  --COG 245.6 \
+  --Heading 245 \
+  --VesselType 80 \
+  --Length 243 \
+  --Width 42.0 \
+  --Draft 14.6 \
+  --Cargo 80 \
+  --time 600 \
+  --steps 20000
+```
+
 ### Signification des paramètres
 
 * `--LAT` : Latitude actuelle du navire
@@ -47,14 +72,17 @@ python script_final.py \
 * `--SOG` : Vitesse sur le fond (Speed Over Ground)
 * `--COG` : Cap sur le fond (Course Over Ground)
 * `--Heading` : Cap compas (direction)
-* `--VesselType` : Type de navire (normalisé par plage dans le script)
+* `--VesselType` : Type de navire (regroupé en 60, 70, 80)
 * `--Length` : Longueur du navire
 * `--Width` : Largeur du navire
 * `--Draft` : Tirant d'eau du navire
 * `--Cargo` : Type de cargaison
-* `--time` : Délai en secondes pour lequel on souhaite la prédiction de position
+* `--time` : Délai (en secondes) entre les prédictions
+* `--steps` : Nombre d'itérations (points de trajectoire futurs à prédire) \[uniquement pour le script bonus]
 
 ## Exemple de sortie
+
+### Pour `script_final.py`
 
 ```bash
 Predicted next position:
@@ -62,11 +90,15 @@ Predicted new LAT: 29.722282600000025
 Predicted new LON: -95.23577529999997
 ```
 
+### Pour `script_final_bonus.py`
+
+Un fichier `prediction_traj_bateau.html` est généré. Il contient une carte interactive affichant la dernière position connue et la trajectoire future prédite du navire.
+
 ## Notes
 
-* Le script charge un modèle pickle (`model_3.pkl`) pour effectuer une prédiction sur les décalages de latitude et longitude.
-* Le type de navire est regroupé dans les catégories 60, 70, ou 80 selon sa valeur initiale.
-* La prédiction fournit directement les nouvelles coordonnées LAT et LON prédites.
+* Le modèle chargé via `model_3.pkl` prédit un décalage de latitude et longitude.
+* Le type de navire est regroupé dans les catégories 60, 70 ou 80 selon sa valeur initiale.
+* La visualisation de la trajectoire est réalisée avec Plotly.
 
 ## Auteur
 

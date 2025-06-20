@@ -46,6 +46,7 @@ if __name__ == '__main__':
     current_lon = last_position['LON']
     sog = last_position['SOG']
     cog = last_position['COG']
+    heading = last_position['Heading']
     vessel_type = last_position['VesselType']
     length = last_position['Length']
     width = last_position['Width']
@@ -69,6 +70,7 @@ if __name__ == '__main__':
             'LON': [current_lon],
             'SOG': [sog],
             'COG': [cog],
+            'Heading': [heading],
             'VesselType': [vessel_type],
             'Length': [length],
             'Width': [width],
