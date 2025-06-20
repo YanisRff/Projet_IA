@@ -4,12 +4,12 @@ Ce dépôt contient les fichiers et scripts pour différents clients. Chaque dos
 
 ## Structure du Projet
 
-- [Besoin_Client_1](#)
-- [Besoin_Client_2](#)
-- [Besoin_Client_3](#)
-- [data_clean.csv](#)
-- [LICENSE](#)
-- [README.md](#)
+- [Besoin_Client_1](Besoin_Client_1)
+- [Besoin_Client_2](Besoin_Client_2)
+- [Besoin_Client_3](Besoin_Client_3)
+- [data_clean.csv](data_clean.csv)
+- [LICENSE](LICENSE)
+- [README.md](README.md)
 
 ## Besoin_Client_1
 
