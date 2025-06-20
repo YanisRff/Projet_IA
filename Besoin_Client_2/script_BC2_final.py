@@ -31,3 +31,10 @@ if __name__ == '__main__':
 
 
 
+#Exemple pour tester
+#TP SPIRIT : --Length 182.5 --Width 32.23 --Draft 11.6
+#-> doit renvoyer 80
+#PAVO J : --Length 139.6 --Width 22.39 --Draft 6.8
+#-> doit renvoyer 70
+#BROWNSEA ENTERPRISE : --Length 10 --Width 6 --Draft 1.1
+#-> doit renvoyer 60

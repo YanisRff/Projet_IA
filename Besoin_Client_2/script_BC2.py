@@ -44,6 +44,10 @@ print('\n avant changement de types \n',data.head(5))
 data = data.astype({'MMSI' : str,'VesselType' : str, 'Length' : float, 'Width' : float, 'Draft' : float})
 print('\n apres changement de types \n',data.head(5))
 
+# Tri des doublons pour éviter l'Overfitting
+print("Il y a",data['MMSI'].nunique(),"bateaux dans la base de donnees")
+data.drop_duplicates(subset='MMSI', inplace=True)
+
 
 #Base train et test et deplacement bateau de la fin base de train
 train_data, test_data = train_test_split(data, test_size=0.2, shuffle=False)
