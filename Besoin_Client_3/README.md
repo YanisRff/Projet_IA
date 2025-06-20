@@ -4,8 +4,8 @@ Ce projet permet de prédire la prochaine position (latitude et longitude) d'un 
 
 ## Fichiers
 
-* `script_final.py` : script principal permettant de faire une prédiction de position unique.
-* `script_final_bonus.py` : version avancée du script qui prédit une trajectoire future sur plusieurs étapes et génère une carte interactive.
+* `script_BC3_final.py` : script principal permettant de faire une prédiction de position unique.
+* `script_BC3_final_bonus.py` : version avancée du script qui prédit une trajectoire future sur plusieurs étapes et génère une carte interactive.
 * `model_3.pkl` : fichier pickle contenant le modèle de prédiction (prérequis pour les scripts).
 
 ## Prérequis
@@ -26,12 +26,12 @@ pip install pandas plotly matplotlib
 
 ## Utilisation
 
-### Script simple (`script_final.py`)
+### Script simple (`script_BC3_final.py`)
 
 Ce script prédit une unique position future du navire à partir de ses données actuelles :
 
 ```bash
-python script_final.py \
+python script_BC3_final.py \
   --LAT 29.72289 \
   --LON -95.23584 \
   --SOG 0.0 \
@@ -45,12 +45,12 @@ python script_final.py \
   --time 183
 ```
 
-### Script bonus (`script_final_bonus.py`)
+### Script bonus (`script_BC3_final_bonus.py`)
 
 Ce script prédit une trajectoire complète sur plusieurs itérations, en plus de générer une visualisation de la trajectoire sur une carte interactive (HTML).
 
 ```bash
-python script_final_bonus.py \
+python script_BC3_final_bonus.py \
   --LAT 28.60688 \
   --LON -94.12511 \
   --SOG 13.0 \
@@ -82,7 +82,7 @@ python script_final_bonus.py \
 
 ## Exemple de sortie
 
-### Pour `script_final.py`
+### Pour `script_BC3_final.py`
 
 ```bash
 Predicted next position:
@@ -90,7 +90,7 @@ Predicted new LAT: 29.722282600000025
 Predicted new LON: -95.23577529999997
 ```
 
-### Pour `script_final_bonus.py`
+### Pour `script_BC3_final_bonus.py`
 
 Un fichier `prediction_traj_bateau.html` est généré. Il contient une carte interactive affichant la dernière position connue et la trajectoire future prédite du navire.
 
